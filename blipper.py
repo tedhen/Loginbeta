@@ -4,6 +4,7 @@
 
 import sqlite3 as lite
 import time
+import requests
 while True:
     while True:
         try:
@@ -33,6 +34,7 @@ while True:
 
             cur.execute("INSERT INTO People VALUES (?,?,?,?,?,?);",
                         (temp_id, rfId, nick_temp, 1, 0, time.time()))
+            requests.put('http://127.0.0.1:5000/', json = {'who': nick_temp, 'what': "login"})
             print('you now exist and are logged in! dont forget to logout!')
             print("-----------------------------------------------")
         else:           # there is user with this ID tag
@@ -43,6 +45,7 @@ while True:
                             (new_total_time, rfId))
                 cur.execute("UPDATE People SET isHere =? WHERE blipId=?",
                             (0, rfId))
+                requests.put('http://127.0.0.1:5000/', json = {'who': str(data[2]), 'what': "logout"})
                 print("-----------------------------------------------")
                 print("Goodbye " + str(data[2]) + " your highscore is: " +
                       str(new_total_time))
@@ -53,6 +56,7 @@ while True:
                             (time.time(), rfId))
                 cur.execute("UPDATE People SET isHere =? WHERE blipId=?",
                             (1, rfId))
+                requests.put('http://127.0.0.1:5000/', json = {'who': str(data[2]), 'what': "login"})
                 print("-----------------------------------------------")
                 print("Welcome " + str(data[2]))
                 print("-----------------------------------------------")
