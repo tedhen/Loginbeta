@@ -18,7 +18,7 @@ with con:
     )
 
     temp_id = 1
-    rfId = 1234
-    nick_temp = 'ted'
+    rfId = 2016050010
+    nick_temp = 'Dalsmo'
     cur.execute("INSERT INTO People VALUES (?,?,?,?,?,?);",
                 (temp_id, rfId, nick_temp, 1, 0, time.time()))
