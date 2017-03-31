@@ -5,11 +5,12 @@
 import sqlite3 as lite
 import time
 import requests
+import hasher
 while True:
     while True:
         try:
             temp = input("Blip me! ")
-            rfId = int(temp)
+            rfId = hasher.encode(temp)
             break
         except ValueError:
             print("Blip not recognised")
