@@ -6,10 +6,11 @@ import sqlite3 as lite
 import time
 import requests
 import hasher
+import getpass
 while True:
     while True:
         try:
-            temp = input("Blip me! ")
+            temp = getpass.getpass("Blip me! ")
             rfId = hasher.encode(temp)
             break
         except ValueError:
