@@ -45,10 +45,8 @@ while True:
             if data[3] is 1:  # is logged in => log hen out
                 time_spent = time.time() - data[5]
                 new_total_time = time_spent + data[4]
-                cur.execute("UPDATE People SET totalTime=? WHERE blipId=?",
-                            (new_total_time, rfId))
-                cur.execute("UPDATE People SET isHere =? WHERE blipId=?",
-                            (0, rfId))
+                cur.execute("UPDATE People SET totalTime=?, isHere=? WHERE blipId=?",
+                            (new_total_time, 0, rfId))
                 requests.put('http://127.0.0.1:5001/', json = {'who': str(data[2]), 'what': "logout"})
                 try:
                     requests.get('http://192.168.42.12:5000/',timeout=0.001)
@@ -60,10 +58,8 @@ while True:
                 print("-----------------------------------------------")
 
             else:   # is not logged in => log hen in
-                cur.execute("UPDATE People SET lastLogin =? WHERE blipId=?",
-                            (time.time(), rfId))
-                cur.execute("UPDATE People SET isHere =? WHERE blipId=?",
-                            (1, rfId))
+                cur.execute("UPDATE People SET lastLogin=?, isHere=? WHERE blipId=?",
+                            (time.time(), 1, rfId))
                 requests.put('http://127.0.0.1:5001/', json = {'who': str(data[2]), 'what': "login"})
                 try:
                     requests.get('http://192.168.42.12:5000/',timeout=0.001)
