@@ -1,2 +1,4 @@
 People.db
 .idea
+*.pyc
+*.swp

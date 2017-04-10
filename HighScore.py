@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3 as lite
+import requests
 import os
 import time
 
@@ -24,8 +25,19 @@ while True:
 
         cur.execute("SELECT * FROM People WHERE isHere = 1")
         rows = cur.fetchall()
-
+        
+        # display som people
         for row in rows:
             print(str(row[2]).ljust(10))
+        
+        # prata med dorropnare och be dem tana
+        try:
+            if len(rows)>0:
+                requests.get('http://192.168.42.10:5000/light/on', timeout=0.1)
+            else:
+                requests.get('http://192.168.42.10:5000/light/off', timeout=0.1)
+        except (requests.exceptions.Timeout, requests.ConnectionError):
+            pass
 
-    time.sleep(15)
+
+    time.sleep(3)
