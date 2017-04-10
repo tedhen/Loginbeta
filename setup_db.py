@@ -1,24 +1,43 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Dev script to setup a test database. """
+""" Dev script to setup a test database. """
 
 import sqlite3 as lite
 import time
+import argparse
+import os
 
-con = lite.connect('People.db')
+from models import Person
+from peewee import *
 
-with con:
+db = SqliteDatabase('People.db', **{})
+db_file = 'People.db'
 
-    cur = con.cursor()
+if __name__ == '__main__':
 
-    cur.execute("DROP TABLE IF EXISTS People")
-    cur.execute(
-        "CREATE TABLE People(Id INT, blipId INT, Nick TEXT, isHere INT," +
-        "totalTime FLOAT, lastLogin FLOAT)"
-    )
+    parser = argparse.ArgumentParser(prog='setup_db',
+                                     description='Setup db for the time system')
 
-    temp_id = 1
-    rfId = 1234
-    nick_temp = 'ted'
-    cur.execute("INSERT INTO People VALUES (?,?,?,?,?,?);",
-                (temp_id, rfId, nick_temp, 1, 0, time.time()))
+    parser.add_argument('--remove', help='Remove the old db first.',
+                        action="store_true")
+    parser.add_argument('action', choices=('dev', 'production'),
+                        help='What type of db to setup.')
+
+    args = parser.parse_args()
+
+    if os.path.isfile(db_file) and args.remove:
+        os.remove(db_file)
+    else:  # Backup db
+        os.rename(db_file, db_file + ".bak_" + time.strftime("%Y%m%d-%H:%M"))
+
+    db.connect()
+
+    db.create_tables([Person])
+
+    if args.action == 'dev':
+        tester = Person(nick='tester', blipId=1234, ishere = False)
+        tester.lastlogin = time.time()
+        tester.totaltime = 0
+        tester.save()
+
+    db.close()
