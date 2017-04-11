@@ -18,6 +18,7 @@ def login_logout(person: Person):
         print('{:-^47}'.format(''))
         print('Goodbye {} your highscore is: {:f}'.format(person.nick, person.total_time))
         print('{:-^47}'.format(''))
+
         person.save()
 
     else:
@@ -62,7 +63,6 @@ if __name__ == '__main__':
         print('')
 
         try:
-            print('Getting ' + str(rfId))
             user = Person.get(Person.blip_id == rfId)
             login_logout(user)
         except Person.DoesNotExist:
