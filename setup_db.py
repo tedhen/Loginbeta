@@ -5,6 +5,7 @@
 import time
 import argparse
 import os
+import hasher
 
 from models import Person
 from peewee import *
@@ -35,6 +36,7 @@ if __name__ == '__main__':
     db.create_tables([Person])
 
     if args.action == 'dev':
+	rf_id = hasher.encode('1234')
         tester = Person(nick='tester', blip_id=1234, is_here=False)
         tester.lastlogin = time.time()
         tester.totaltime = 0

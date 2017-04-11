@@ -8,6 +8,7 @@ Simple script to display the current High score and also who is currently logged
 import itertools
 from peewee import *
 from models import Person
+import requests
 import os
 import time
 
@@ -29,4 +30,13 @@ while True:
     for person in online_persons:
         print(person.nick)
 
-    time.sleep(15)
+    # prata med dorropnare och be dem tana
+    try:
+        if len(rows)>0:
+            requests.get('http://192.168.42.10:5000/light/on', timeout=0.1)
+        else:
+            requests.get('http://192.168.42.10:5000/light/off', timeout=0.1)
+    except (requests.exceptions.Timeout, requests.ConnectionError):
+        pass
+
+    time.sleep(3)
