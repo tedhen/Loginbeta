@@ -15,25 +15,25 @@ def login_logout(person: Person):
         time_spent = time.time() - person.last_login
         person.total_time = person.total_time + time_spent
 
-        print('-----------------------------------------------')
-        print('Goodbye ' + person.nick + ' your highscore is: ' +
-              str(person.total_time))
-        print('-----------------------------------------------')
-        print(person.save())
+        print('{:-^47}'.format(''))
+        print('Goodbye {} your highscore is: {:f}'.format(person.nick, person.total_time))
+        print('{:-^47}'.format(''))
+        person.save()
+
     else:
         person.is_here = True
         person.last_login = time.time()
 
-        print("-----------------------------------------------")
-        print("Welcome " + person.nick)
-        print("-----------------------------------------------")
+        print('{:-^47}'.format(''))
+        print('Welcome {}'.format(person.nick))
+        print('{:-^47}'.format(''))
 
         person.save()
 
 
 def create_person(rf_id: int):
-    print('-----------------------------------------------')
-    print('There is no rfidtag named ', rf_id, ' creating instance!')
+    print('{:-^47}'.format(''))
+    print('There is no rfidtag named {} creating instance!'.format(rf_id))
 
     nick = input('Input your nick: ')
     new_member = Person(nick=nick)
@@ -44,7 +44,7 @@ def create_person(rf_id: int):
 
     new_member.save()
     print('you now exist and are logged in! don\'t forget to logout!')
-    print('-----------------------------------------------')
+    print('{:-^47}'.format(''))
 
 if __name__ == '__main__':
 
