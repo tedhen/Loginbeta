@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
 # -*- coding: utf-8 -*-
+"""
+Simple script to display the current High score and also who is currently logged in.
+"""
+
 import itertools
 from peewee import *
 from models import Person
