@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """Simple script for registering members coming and going. """
 
@@ -9,34 +9,42 @@ import time
 db = SqliteDatabase('People.db', **{})
 
 
-def login(user):
+def login_logout(person: Person):
+    if person.is_here:
+        person.is_here = False
+        time_spent = time.time() - person.last_login
+        person.total_time = person.total_time + time_spent
 
-
-    if user.ishere:
-        user.ishere = False
-        user.
-        print("-----------------------------------------------")
-        print("Goodbye " + user.nick + " your highscore is: " +
-              user.totaltime)
-        print("-----------------------------------------------")
+        print('-----------------------------------------------')
+        print('Goodbye ' + person.nick + ' your highscore is: ' +
+              str(person.total_time))
+        print('-----------------------------------------------')
+        print(person.save())
     else:
-        pass
+        person.is_here = True
+        person.last_login = time.time()
+
+        print("-----------------------------------------------")
+        print("Welcome " + person.nick)
+        print("-----------------------------------------------")
+
+        person.save()
 
 
-def createPerson(rfId):
-    print("-----------------------------------------------")
-    print('There is no rfidtag named ', rfId, ' creating instance!')
+def create_person(rf_id: int):
+    print('-----------------------------------------------')
+    print('There is no rfidtag named ', rf_id, ' creating instance!')
 
     nick = input('Input your nick: ')
-    new_member = Person.create(nick=nick)
-    new_member.lastlogin = time.time()
-    new_member.blipId = rfId
-    new_member.ishere = True
-    new_member.totaltime = 0
+    new_member = Person(nick=nick)
+    new_member.last_login = time.time()
+    new_member.blip_id = rf_id
+    new_member.is_here = True
+    new_member.total_time = 0
 
     new_member.save()
-    print('you now exist and are logged in! dont forget to logout!')
-    print("-----------------------------------------------")
+    print('you now exist and are logged in! don\'t forget to logout!')
+    print('-----------------------------------------------')
 
 if __name__ == '__main__':
 
@@ -50,53 +58,12 @@ if __name__ == '__main__':
                 break
             except ValueError:
                 print("Blip not recognised")
-        print("")
+
+        print('')
 
         try:
-            user = Person.get(Person.blipId == rfId)
-            login(user)
+            print('Getting ' + str(rfId))
+            user = Person.get(Person.blip_id == rfId)
+            login_logout(user)
         except Person.DoesNotExist:
-            createPerson(rfId)
-
-       # con = lite.connect('People.db')
-       # with con:
-       #     cur = con.cursor()
-       #     cur.execute("SELECT * FROM People WHERE blipId = ?", (rfId,))
-       #     data = cur.fetchone()
-
-       #     if data is None:  # there is no user with this ID tag
-       #         print("-----------------------------------------------")
-       #         print('There is no rfidtag named ', rfId, ' creating instance!')
-
-       #         nick_temp = input("input your nick: ")
-       #         temp = cur.lastrowid
-       #         if temp is None:
-       #             temp_id = 1
-       #         else:
-       #             temp_id = temp + 1
-
-       #         cur.execute("INSERT INTO People VALUES (?,?,?,?,?,?);",
-       #                     (temp_id, rfId, nick_temp, 1, 0, time.time()))
-       #         print('you now exist and are logged in! dont forget to logout!')
-       #         print("-----------------------------------------------")
-       #     else:           # there is user with this ID tag
-       #         if data[3] is 1:  # is logged in => log hen out
-       #             time_spent = time.time() - data[5]
-       #             new_total_time = time_spent + data[4]
-       #             cur.execute("UPDATE People SET totalTime=? WHERE blipId=?",
-       #                         (new_total_time, rfId))
-       #             cur.execute("UPDATE People SET isHere =? WHERE blipId=?",
-       #                         (0, rfId))
-       #             print("-----------------------------------------------")
-       #             print("Goodbye " + str(data[2]) + " your highscore is: " +
-       #                   str(new_total_time))
-       #             print("-----------------------------------------------")
-
-       #         else:   # is not logged in => log hen in
-       #             cur.execute("UPDATE People SET lastLogin =? WHERE blipId=?",
-       #                         (time.time(), rfId))
-       #             cur.execute("UPDATE People SET isHere =? WHERE blipId=?",
-       #                         (1, rfId))
-       #             print("-----------------------------------------------")
-       #             print("Welcome " + str(data[2]))
-       #             print("-----------------------------------------------")
+            create_person(rfId)
