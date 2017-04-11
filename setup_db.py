@@ -36,10 +36,10 @@ if __name__ == '__main__':
     db.create_tables([Person])
 
     if args.action == 'dev':
-	rf_id = hasher.encode('1234')
-        tester = Person(nick='tester', blip_id=1234, is_here=False)
-        tester.lastlogin = time.time()
-        tester.totaltime = 0
+        rf_id = hasher.encode('1234')
+        tester = Person(nick='tester', blip_id=rf_id, is_here=False)
+        tester.last_login = time.time()
+        tester.total_time = 0
         tester.save()
 
     db.close()

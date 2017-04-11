@@ -1,6 +1,7 @@
 import hashlib
 
-salt = "AhBaik4auv3Seihu"
+salt = 'AhBaik4auv3Seihu'
 
-def encode(clearString):
-    return hashlib.sha512(str.encode(salt + clearString)).hexdigest()
+
+def encode(clear_string):
+    return hashlib.sha512(str.encode(salt + clear_string)).hexdigest()

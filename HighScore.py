@@ -30,9 +30,9 @@ while True:
     for person in online_persons:
         print(person.nick)
 
-    # prata med dorropnare och be dem tana
+    # If there are people present, turn on the lights and vice versa.
     try:
-        if len(rows)>0:
+        if len(online_persons) > 0:
             requests.get('http://192.168.42.10:5000/light/on', timeout=0.1)
         else:
             requests.get('http://192.168.42.10:5000/light/off', timeout=0.1)

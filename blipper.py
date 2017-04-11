@@ -24,11 +24,11 @@ def login_logout(person: Person):
 
         person.save()
 
-        requests.put('http://127.0.0.1:5001/', json = {'who': str(data[2]), 'what': "logout"})
         try:
-            requests.get('http://192.168.42.12:5000/',timeout=0.001)
-        except:
-            print(" ")
+            requests.put('http://127.0.0.1:5001/', json={'who': person.nick, 'what': "logout"}, timeout=0.001)
+            requests.get('http://192.168.42.12:5000/', timeout=0.001)
+        except TimeoutError:
+            pass
 
     else:
         person.is_here = True
@@ -40,11 +40,11 @@ def login_logout(person: Person):
 
         person.save()
 
-        requests.put('http://127.0.0.1:5001/', json = {'who': str(data[2]), 'what': "login"})
+        requests.put('http://127.0.0.1:5001/', json={'who': person.nick, 'what': "login"})
         try:
-            requests.get('http://192.168.42.12:5000/',timeout=0.001)
-        except:
-            print(" ")
+            requests.get('http://192.168.42.12:5000/', timeout=0.001)
+        except TimeoutError:
+            pass
 
 
 def create_person(rf_id: int):
@@ -60,11 +60,11 @@ def create_person(rf_id: int):
 
     new_member.save()
 
-    requests.put('http://127.0.0.1:5001/', json = {'who': nick_temp, 'what': "login"})
-        try:
-            requests.get('http://192.168.42.12:5000/',timeout=0.001)
-         except:
-            print(" ")
+    requests.put('http://127.0.0.1:5001/', json={'who': nick, 'what': "login"})
+    try:
+        requests.get('http://192.168.42.12:5000/', timeout=0.001)
+    except TimeoutError:
+        pass
 
     print('you now exist and are logged in! don\'t forget to logout!')
     print('{:-^47}'.format(''))
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     while True:
         while True:
             try:
-                temp = input("Blip me! ")
+                temp = getpass.getpass("Blip me! ")
                 rfId = hasher.encode(temp)
                 break
             except ValueError:
