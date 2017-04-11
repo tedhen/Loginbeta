@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """ Dev script to setup a test database. """
 
-import sqlite3 as lite
 import time
 import argparse
 import os
@@ -25,17 +24,18 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if os.path.isfile(db_file) and args.remove:
-        os.remove(db_file)
-    else:  # Backup db
-        os.rename(db_file, db_file + ".bak_" + time.strftime("%Y%m%d-%H:%M"))
+    if os.path.isfile(db_file):
+        if args.remove:
+            os.remove(db_file)
+        else:  # Backup db
+            os.rename(db_file, db_file + ".bak_" + time.strftime("%Y%m%d-%H:%M"))
 
     db.connect()
 
     db.create_tables([Person])
 
     if args.action == 'dev':
-        tester = Person(nick='tester', blipId=1234, ishere = False)
+        tester = Person(nick='tester', blip_id=1234, is_here=False)
         tester.lastlogin = time.time()
         tester.totaltime = 0
         tester.save()
