@@ -1,32 +1,28 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # -*- coding: utf-8 -*-
-
-import sqlite3 as lite
+import itertools
+from peewee import *
+from models import Person
 import os
 import time
 
+db = SqliteDatabase('People.db', **{})
+
 while True:
     os.system('clear')
-    con = lite.connect('People.db')
-    with con:
-        cur = con.cursor()
 
-        print("------------ Highscore -----------")
+    print('{:-^39}'.format('High score'))
 
-        cur.execute("SELECT * FROM People ORDER BY totalTime DESC")
-        rows = cur.fetchall()
+    high_score = Person.select().order_by(Person.total_time.desc())
 
-        for i in range(0, len(rows)):
-            print(str(i+1) + ": " + str(rows[i][2]).ljust(10) +
-                  " score: " + str(rows[i][4]))
+    for person, i in zip(high_score, itertools.count(start=1)):
+        print('{:>2}: {:<14} score: {:>13f}'.format(i, person.nick, person.total_time))
 
-        print("------------- People online ------")
+    print('{:-^39}'.format('People online'))
 
-        cur.execute("SELECT * FROM People WHERE isHere = 1")
-        rows = cur.fetchall()
-
-        for row in rows:
-            print(str(row[2]).ljust(10))
+    online_persons = Person.select().where(Person.is_here == True)
+    for person in online_persons:
+        print(person.nick)
 
     time.sleep(15)
