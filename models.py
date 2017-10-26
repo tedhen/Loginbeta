@@ -13,3 +13,13 @@ class Person(Model):
     class Meta:
         database = db
         db_table = 'People'
+
+
+class DbVersion(Model):
+    version = IntegerField(db_column='version', null=False)
+    date_updated = DateTimeField()
+    date_released = DateTimeField(null=False)
+
+    class Meta:
+        database = db
+        db_table = 'DbVersion'
